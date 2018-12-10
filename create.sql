@@ -5,22 +5,21 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema cecs323sec5s22
 -- -----------------------------------------------------
-DROP SCHEMA IF EXISTS `mydb` ;
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema cecs323sec5s22
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
-USE `mydb` ;
+CREATE SCHEMA IF NOT EXISTS `cecs323sec5s22` DEFAULT CHARACTER SET utf8 ;
+USE `cecs323sec5s22` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`Customer`
+-- Table `cecs323sec5s22`.`Customer`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Customer` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`Customer` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Customer` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`Customer` (
   `CID` INT NOT NULL,
   `mimingDollars` INT NULL,
   PRIMARY KEY (`CID`))
@@ -28,72 +27,69 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`PrivateCust`
+-- Table `cecs323sec5s22`.`PrivateCust`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`PrivateCust` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`PrivateCust` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`PrivateCust` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`PrivateCust` (
   `cName` VARCHAR(40) NOT NULL,
   `email` VARCHAR(45) NULL,
   `mailingAddress` VARCHAR(45) NULL,
   `CID` INT NOT NULL,
-  INDEX `CID_idx` (`CID` ASC) VISIBLE,
   PRIMARY KEY (`CID`, `cName`),
   CONSTRAINT `privatecust_fk_CID`
     FOREIGN KEY (`CID`)
-    REFERENCES `mydb`.`Customer` (`CID`)
+    REFERENCES `cecs323sec5s22`.`Customer` (`CID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`corporation`
+-- Table `cecs323sec5s22`.`corporation`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`corporation` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`corporation` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`corporation` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`corporation` (
   `corpName` VARCHAR(45) NOT NULL,
   `orgName` VARCHAR(45) NULL,
   `address` VARCHAR(45) NULL,
   `contact` VARCHAR(45) NULL,
   `CID` INT NOT NULL,
   PRIMARY KEY (`corpName`, `CID`),
-  INDEX `CID_idx` (`CID` ASC) VISIBLE,
   CONSTRAINT `corp_fk_CID`
     FOREIGN KEY (`CID`)
-    REFERENCES `mydb`.`Customer` (`CID`)
+    REFERENCES `cecs323sec5s22`.`Customer` (`CID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`order`
+-- Table `cecs323sec5s22`.`order`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`order` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`order` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`order` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`order` (
   `OID` INT NOT NULL,
   `orderStart` DATETIME NULL,
   `orderFinish` DATETIME NULL,
   `CID` INT NOT NULL,
   PRIMARY KEY (`OID`, `CID`),
-  INDEX `CID_idx` (`CID` ASC) VISIBLE,
   CONSTRAINT `order_fk_CID`
     FOREIGN KEY (`CID`)
-    REFERENCES `mydb`.`Customer` (`CID`)
+    REFERENCES `cecs323sec5s22`.`Customer` (`CID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`togo`
+-- Table `cecs323sec5s22`.`togo`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`togo` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`togo` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`togo` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`togo` (
   `togoID` INT NOT NULL,
   `orderStart` DATETIME NULL,
   `orderFinish` VARCHAR(45) NULL,
@@ -103,36 +99,35 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`togoTime`
+-- Table `cecs323sec5s22`.`togoTime`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`togoTime` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`togoTime` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`togoTime` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`togoTime` (
   `togoID` INT NOT NULL,
   `OID` INT NOT NULL,
   `orderStart` DATETIME NOT NULL,
   `orderFinish` DATETIME NULL,
   PRIMARY KEY (`togoID`, `OID`, `orderStart`),
-  INDEX `OID_idx` (`OID` ASC) VISIBLE,
   CONSTRAINT `togotime_fk_OID`
     FOREIGN KEY (`OID`)
-    REFERENCES `mydb`.`order` (`OID`)
+    REFERENCES `cecs323sec5s22`.`order` (`OID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `togotime_fk_togoID`
     FOREIGN KEY (`togoID`)
-    REFERENCES `mydb`.`togo` (`togoID`)
+    REFERENCES `cecs323sec5s22`.`togo` (`togoID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`menuItem`
+-- Table `cecs323sec5s22`.`menuItem`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`menuItem` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`menuItem` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`menuItem` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`menuItem` (
   `name` VARCHAR(45) NOT NULL,
   `spicyness` VARCHAR(45) NULL,
   `catagorey` VARCHAR(45) NULL,
@@ -141,96 +136,94 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Menu`
+-- Table `cecs323sec5s22`.`Menu`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Menu` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`Menu` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Menu` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`Menu` (
   `menuType` INT NOT NULL,
   PRIMARY KEY (`menuType`))
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`ItemOnMenu`
+-- Table `cecs323sec5s22`.`ItemOnMenu`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`ItemOnMenu` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`ItemOnMenu` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`ItemOnMenu` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`ItemOnMenu` (
   `MenuItemID` INT NOT NULL,
   `menuType` INT NULL,
   `price` INT NULL,
   `size` VARCHAR(1) NULL,
   `name` VARCHAR(45) NULL,
   PRIMARY KEY (`MenuItemID`),
-  INDEX `name_idx` (`name` ASC) VISIBLE,
-  INDEX `menuType_idx` (`menuType` ASC) VISIBLE,
+  
   CONSTRAINT `itemonmenu_fk_name`
     FOREIGN KEY (`name`)
-    REFERENCES `mydb`.`menuItem` (`name`)
+    REFERENCES `cecs323sec5s22`.`menuItem` (`name`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `itemonmenu_fk_menuType`
     FOREIGN KEY (`menuType`)
-    REFERENCES `mydb`.`Menu` (`menuType`)
+    REFERENCES `cecs323sec5s22`.`Menu` (`menuType`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`orderItem`
+-- Table `cecs323sec5s22`.`orderItem`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`orderItem` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`orderItem` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`orderItem` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`orderItem` (
   `OID` INT NOT NULL,
   `CID` INT NOT NULL,
   `MenuItemID` INT NOT NULL,
   PRIMARY KEY (`OID`, `CID`, `MenuItemID`),
-  INDEX `MenuItemID_idx` (`MenuItemID` ASC) VISIBLE,
-  INDEX `CID_idx` (`CID` ASC) VISIBLE,
+
   CONSTRAINT `orderitem_fk_OID`
     FOREIGN KEY (`OID`)
-    REFERENCES `mydb`.`order` (`OID`)
+    REFERENCES `cecs323sec5s22`.`order` (`OID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `orderitem_fk_MenuItemID`
     FOREIGN KEY (`MenuItemID`)
-    REFERENCES `mydb`.`ItemOnMenu` (`MenuItemID`)
+    REFERENCES `cecs323sec5s22`.`ItemOnMenu` (`MenuItemID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `orderitem_fk_CID`
     FOREIGN KEY (`CID`)
-    REFERENCES `mydb`.`order` (`CID`)
+    REFERENCES `cecs323sec5s22`.`order` (`CID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Brunch`
+-- Table `cecs323sec5s22`.`Brunch`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Brunch` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`Brunch` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Brunch` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`Brunch` (
   `menuType` INT NOT NULL,
   `SetPrice` INT NULL,
   PRIMARY KEY (`menuType`),
   CONSTRAINT `brunch_fk_menuType`
     FOREIGN KEY (`menuType`)
-    REFERENCES `mydb`.`Menu` (`menuType`)
+    REFERENCES `cecs323sec5s22`.`Menu` (`menuType`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Employee`
+-- Table `cecs323sec5s22`.`Employee`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Employee` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`Employee` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Employee` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`Employee` (
   `EID` INT NOT NULL,
   `firstName` VARCHAR(45) NULL,
   `lastName` VARCHAR(45) NULL,
@@ -240,11 +233,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`shift`
+-- Table `cecs323sec5s22`.`shift`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`shift` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`shift` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`shift` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`shift` (
   `SID` INT NOT NULL,
   `timeShift` DATETIME NULL,
   PRIMARY KEY (`SID`))
@@ -252,317 +245,308 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`WaitStaff`
+-- Table `cecs323sec5s22`.`WaitStaff`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`WaitStaff` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`WaitStaff` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`WaitStaff` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`WaitStaff` (
   `EID` INT NOT NULL,
   `SID` INT NOT NULL,
   `hours` INT NULL,
   PRIMARY KEY (`EID`, `SID`),
-  INDEX `SID_idx` (`SID` ASC) VISIBLE,
   CONSTRAINT `waitstaff_fk_EID`
     FOREIGN KEY (`EID`)
-    REFERENCES `mydb`.`Employee` (`EID`)
+    REFERENCES `cecs323sec5s22`.`Employee` (`EID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `waitstaff_fk_SID`
     FOREIGN KEY (`SID`)
-    REFERENCES `mydb`.`shift` (`SID`)
+    REFERENCES `cecs323sec5s22`.`shift` (`SID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Table`
+-- Table `cecs323sec5s22`.`Table`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Table` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`Table` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Table` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`Table` (
   `EID` INT NULL,
   `TableNumber` INT NOT NULL,
   PRIMARY KEY (`TableNumber`),
-  INDEX `EID_idx` (`EID` ASC) VISIBLE,
   CONSTRAINT `table_fk_EID`
     FOREIGN KEY (`EID`)
-    REFERENCES `mydb`.`WaitStaff` (`EID`)
+    REFERENCES `cecs323sec5s22`.`WaitStaff` (`EID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`InPerson`
+-- Table `cecs323sec5s22`.`InPerson`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`InPerson` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`InPerson` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`InPerson` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`InPerson` (
   `OID` INT NOT NULL,
   `partySize` INT NULL,
   `tableNumber` INT NULL,
   PRIMARY KEY (`OID`),
-  INDEX `tableNumber_idx` (`tableNumber` ASC) VISIBLE,
   CONSTRAINT `inperson_fk_OID`
     FOREIGN KEY (`OID`)
-    REFERENCES `mydb`.`order` (`OID`)
+    REFERENCES `cecs323sec5s22`.`order` (`OID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `inperson_fk_tableNumber`
     FOREIGN KEY (`tableNumber`)
-    REFERENCES `mydb`.`Table` (`TableNumber`)
+    REFERENCES `cecs323sec5s22`.`Table` (`TableNumber`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Manager`
+-- Table `cecs323sec5s22`.`Manager`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Manager` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`Manager` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Manager` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`Manager` (
   `EID` INT NOT NULL,
   `SID` INT NOT NULL,
   `salaryAmount` INT NULL,
   PRIMARY KEY (`EID`, `SID`),
-  INDEX `SID_idx` (`SID` ASC) VISIBLE,
   CONSTRAINT `manager_fk_EID`
     FOREIGN KEY (`EID`)
-    REFERENCES `mydb`.`Employee` (`EID`)
+    REFERENCES `cecs323sec5s22`.`Employee` (`EID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `manager_fk_SID`
     FOREIGN KEY (`SID`)
-    REFERENCES `mydb`.`shift` (`SID`)
+    REFERENCES `cecs323sec5s22`.`shift` (`SID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Dishwasher`
+-- Table `cecs323sec5s22`.`Dishwasher`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Dishwasher` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`Dishwasher` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Dishwasher` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`Dishwasher` (
   `EID` INT NOT NULL,
   `SID` INT NOT NULL,
   `hours` VARCHAR(45) NULL,
   PRIMARY KEY (`EID`, `SID`),
-  INDEX `SID_idx` (`SID` ASC) VISIBLE,
   CONSTRAINT `dishwasher_fk_EID`
     FOREIGN KEY (`EID`)
-    REFERENCES `mydb`.`Employee` (`EID`)
+    REFERENCES `cecs323sec5s22`.`Employee` (`EID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `dishwasher_fk_SID`
     FOREIGN KEY (`SID`)
-    REFERENCES `mydb`.`shift` (`SID`)
+    REFERENCES `cecs323sec5s22`.`shift` (`SID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`MaitreD`
+-- Table `cecs323sec5s22`.`MaitreD`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`MaitreD` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`MaitreD` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`MaitreD` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`MaitreD` (
   `SID` INT NOT NULL,
   `EID` INT NOT NULL,
   `hours` INT NULL,
   PRIMARY KEY (`SID`, `EID`),
   CONSTRAINT `maitreD_fk_EID`
     FOREIGN KEY (`EID`)
-    REFERENCES `mydb`.`Employee` (`EID`)
+    REFERENCES `cecs323sec5s22`.`Employee` (`EID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `maitreD_fk_SID`
     FOREIGN KEY (`SID`)
-    REFERENCES `mydb`.`shift` (`SID`)
+    REFERENCES `cecs323sec5s22`.`shift` (`SID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`LineCook`
+-- Table `cecs323sec5s22`.`LineCook`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`LineCook` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`LineCook` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`LineCook` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`LineCook` (
   `EID` INT NOT NULL,
   `SID` INT NOT NULL,
   PRIMARY KEY (`EID`, `SID`),
-  INDEX `SID_idx` (`SID` ASC) VISIBLE,
   CONSTRAINT `linecook_fk_EID`
     FOREIGN KEY (`EID`)
-    REFERENCES `mydb`.`Employee` (`EID`)
+    REFERENCES `cecs323sec5s22`.`Employee` (`EID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `linecook_fk_SID`
     FOREIGN KEY (`SID`)
-    REFERENCES `mydb`.`shift` (`SID`)
+    REFERENCES `cecs323sec5s22`.`shift` (`SID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`SousChef`
+-- Table `cecs323sec5s22`.`SousChef`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`SousChef` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`SousChef` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`SousChef` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`SousChef` (
   `EID` INT NOT NULL,
   `SID` INT NOT NULL,
   PRIMARY KEY (`EID`, `SID`),
-  INDEX `souschef_fk_SID_idx` (`SID` ASC) VISIBLE,
   CONSTRAINT `souschef_fk_EID`
     FOREIGN KEY (`EID`)
-    REFERENCES `mydb`.`Employee` (`EID`)
+    REFERENCES `cecs323sec5s22`.`Employee` (`EID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `souschef_fk_SID`
     FOREIGN KEY (`SID`)
-    REFERENCES `mydb`.`shift` (`SID`)
+    REFERENCES `cecs323sec5s22`.`shift` (`SID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`HeadChef`
+-- Table `cecs323sec5s22`.`HeadChef`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`HeadChef` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`HeadChef` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`HeadChef` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`HeadChef` (
   `SID` INT NOT NULL,
   `EID` INT NOT NULL,
   PRIMARY KEY (`SID`, `EID`),
-  INDEX `EID_idx` (`EID` ASC) VISIBLE,
   CONSTRAINT `headchef_fk_EID`
     FOREIGN KEY (`EID`)
-    REFERENCES `mydb`.`Employee` (`EID`)
+    REFERENCES `cecs323sec5s22`.`Employee` (`EID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `headchef_fk_SID`
     FOREIGN KEY (`SID`)
-    REFERENCES `mydb`.`shift` (`SID`)
+    REFERENCES `cecs323sec5s22`.`shift` (`SID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Recipe`
+-- Table `cecs323sec5s22`.`Recipe`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Recipe` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`Recipe` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Recipe` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`Recipe` (
   `EID` INT NOT NULL,
   `RecipeName` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`EID`, `RecipeName`),
   CONSTRAINT `recipe_fk_EID`
     FOREIGN KEY (`EID`)
-    REFERENCES `mydb`.`HeadChef` (`SID`)
+    REFERENCES `cecs323sec5s22`.`HeadChef` (`SID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Department`
+-- Table `cecs323sec5s22`.`Department`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Department` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`Department` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Department` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`Department` (
   `EID` INT NOT NULL,
   `departmentID` INT NOT NULL,
   `dName` VARCHAR(45) NULL,
   PRIMARY KEY (`EID`, `departmentID`),
   CONSTRAINT `deparment_fk_EID`
     FOREIGN KEY (`EID`)
-    REFERENCES `mydb`.`LineCook` (`EID`)
+    REFERENCES `cecs323sec5s22`.`LineCook` (`EID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`skills`
+-- Table `cecs323sec5s22`.`skills`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`skills` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`skills` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`skills` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`skills` (
   `EID` INT NULL,
   `skillName` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`skillName`),
   CONSTRAINT `skills_fk_EID`
     FOREIGN KEY (`EID`)
-    REFERENCES `mydb`.`SousChef` (`EID`)
+    REFERENCES `cecs323sec5s22`.`SousChef` (`EID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Mentorship`
+-- Table `cecs323sec5s22`.`Mentorship`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Mentorship` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`Mentorship` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Mentorship` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`Mentorship` (
   `EID` INT NOT NULL,
   `startDate` DATETIME NULL,
   `endDate` DATETIME NULL,
   `skillName` VARCHAR(45) NULL,
   PRIMARY KEY (`EID`),
-  INDEX `skillName_idx` (`skillName` ASC) VISIBLE,
   CONSTRAINT `mentorship_skillName_fk`
     FOREIGN KEY (`skillName`)
-    REFERENCES `mydb`.`skills` (`skillName`)
+    REFERENCES `cecs323sec5s22`.`skills` (`skillName`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `menotorship1_fk_EID`
     FOREIGN KEY (`EID`)
-    REFERENCES `mydb`.`SousChef` (`EID`)
+    REFERENCES `cecs323sec5s22`.`SousChef` (`EID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Web`
+-- Table `cecs323sec5s22`.`Web`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Web` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`Web` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Web` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`Web` (
   `OID` INT NOT NULL,
   `ip` INT NULL,
   PRIMARY KEY (`OID`),
   CONSTRAINT `web_fk_OID`
     FOREIGN KEY (`OID`)
-    REFERENCES `mydb`.`order` (`OID`)
+    REFERENCES `cecs323sec5s22`.`order` (`OID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Phone`
+-- Table `cecs323sec5s22`.`Phone`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Phone` ;
+DROP TABLE IF EXISTS `cecs323sec5s22`.`Phone` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Phone` (
+CREATE TABLE IF NOT EXISTS `cecs323sec5s22`.`Phone` (
   `OID` INT NOT NULL,
   `phone` INT NULL,
   PRIMARY KEY (`OID`),
   CONSTRAINT `phone_fk_OID`
     FOREIGN KEY (`OID`)
-    REFERENCES `mydb`.`order` (`OID`)
+    REFERENCES `cecs323sec5s22`.`order` (`OID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
