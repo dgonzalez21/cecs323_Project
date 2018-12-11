@@ -520,8 +520,7 @@ CREATE TABLE IF NOT EXISTS `cecs323sec5og7`.`Mentorship` (
   `skillName` VARCHAR(45) NULL,
   `LearnerID` INT NOT NULL,
   PRIMARY KEY (`TeacherID`, `LearnerID`, `startDate`),
-  INDEX `skillName_idx` (`skillName` ASC) VISIBLE,
-  INDEX `mentorship2_fk_EId_idx` (`LearnerID` ASC) VISIBLE,
+  
   CONSTRAINT `mentorship_skillName_fk`
     FOREIGN KEY (`skillName`)
     REFERENCES `cecs323sec5og7`.`skills` (`skillName`)
