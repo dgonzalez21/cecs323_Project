@@ -238,7 +238,7 @@ CREATE TABLE IF NOT EXISTS `cecs323sec5og7`.`Employee` (
   `EID` INT NOT NULL,
   `firstName` VARCHAR(45) NULL,
   `lastName` VARCHAR(45) NULL,
-  `payMethod` VARCHAR(4) NULL,
+  `payMethod` VARCHAR(40) NULL,
   PRIMARY KEY (`EID`))
 ENGINE = InnoDB;
 
@@ -469,7 +469,7 @@ CREATE TABLE IF NOT EXISTS `cecs323sec5og7`.`Recipe` (
   PRIMARY KEY (`EID`, `RecipeName`),
   CONSTRAINT `recipe_fk_EID`
     FOREIGN KEY (`EID`)
-    REFERENCES `cecs323sec5og7`.`HeadChef` (`SID`)
+    REFERENCES `cecs323sec5og7`.`HeadChef` (`EID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
