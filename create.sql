@@ -72,9 +72,9 @@ DROP TABLE IF EXISTS `cecs323sec5og7`.`order` ;
 
 CREATE TABLE IF NOT EXISTS `cecs323sec5og7`.`order` (
   `OID` INT NOT NULL,
-  `orderStart` DATETIME NULL,
-  `orderFinish` DATETIME NULL,
   `CID` INT NOT NULL,
+  `payMethod` VARCHAR(45) NULL,
+  `orderDate` DATETIME NULL,
   PRIMARY KEY (`OID`, `CID`),
   CONSTRAINT `order_fk_CID`
     FOREIGN KEY (`CID`)
@@ -90,11 +90,23 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `cecs323sec5og7`.`togo` ;
 
 CREATE TABLE IF NOT EXISTS `cecs323sec5og7`.`togo` (
-  `togoID` INT NOT NULL,
-  `orderStart` DATETIME NULL,
+  `orderStart` DATETIME NOT NULL,
   `orderFinish` VARCHAR(45) NULL,
   `pickUpTime` VARCHAR(45) NULL,
-  PRIMARY KEY (`togoID`))
+  `OID` INT NOT NULL,
+  `CID` INT NOT NULL,
+  PRIMARY KEY (`OID`, `CID`, `orderStart`),
+
+  CONSTRAINT `togo_fk_OID`
+    FOREIGN KEY (`OID`)
+    REFERENCES `cecs323sec5og7`.`order` (`OID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `togo_fk_CID`
+    FOREIGN KEY (`CID`)
+    REFERENCES `cecs323sec5og7`.`order` (`CID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -104,19 +116,19 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `cecs323sec5og7`.`togoTime` ;
 
 CREATE TABLE IF NOT EXISTS `cecs323sec5og7`.`togoTime` (
-  `togoID` INT NOT NULL,
   `OID` INT NOT NULL,
   `orderStart` DATETIME NOT NULL,
   `orderFinish` DATETIME NULL,
-  PRIMARY KEY (`togoID`, `OID`, `orderStart`),
+  `CID` INT NOT NULL,
+  PRIMARY KEY (`OID`, `orderStart`, `CID`),
   CONSTRAINT `togotime_fk_OID`
     FOREIGN KEY (`OID`)
-    REFERENCES `cecs323sec5og7`.`order` (`OID`)
+    REFERENCES `cecs323sec5og7`.`togo` (`OID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `togotime_fk_togoID`
-    FOREIGN KEY (`togoID`)
-    REFERENCES `cecs323sec5og7`.`togo` (`togoID`)
+  CONSTRAINT `togotime_fk_CID`
+    FOREIGN KEY (`CID`)
+    REFERENCES `cecs323sec5og7`.`togo` (`CID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -238,7 +250,7 @@ DROP TABLE IF EXISTS `cecs323sec5og7`.`shift` ;
 
 CREATE TABLE IF NOT EXISTS `cecs323sec5og7`.`shift` (
   `SID` INT NOT NULL,
-  `timeShift` DATETIME NULL,
+  `timeShift` VARCHAR(2) NULL,
   PRIMARY KEY (`SID`))
 ENGINE = InnoDB;
 
@@ -252,6 +264,7 @@ CREATE TABLE IF NOT EXISTS `cecs323sec5og7`.`WaitStaff` (
   `EID` INT NOT NULL,
   `SID` INT NOT NULL,
   `hours` INT NULL,
+  `tipAmount` INT NULL,
   PRIMARY KEY (`EID`, `SID`),
   CONSTRAINT `waitstaff_fk_EID`
     FOREIGN KEY (`EID`)
@@ -383,6 +396,7 @@ DROP TABLE IF EXISTS `cecs323sec5og7`.`LineCook` ;
 CREATE TABLE IF NOT EXISTS `cecs323sec5og7`.`LineCook` (
   `EID` INT NOT NULL,
   `SID` INT NOT NULL,
+  `salaryAmount` VARCHAR(45) NULL,
   PRIMARY KEY (`EID`, `SID`),
   CONSTRAINT `linecook_fk_EID`
     FOREIGN KEY (`EID`)
@@ -405,6 +419,7 @@ DROP TABLE IF EXISTS `cecs323sec5og7`.`SousChef` ;
 CREATE TABLE IF NOT EXISTS `cecs323sec5og7`.`SousChef` (
   `EID` INT NOT NULL,
   `SID` INT NOT NULL,
+  `salaryAmount` VARCHAR(45) NULL,
   PRIMARY KEY (`EID`, `SID`),
   CONSTRAINT `souschef_fk_EID`
     FOREIGN KEY (`EID`)
@@ -427,7 +442,9 @@ DROP TABLE IF EXISTS `cecs323sec5og7`.`HeadChef` ;
 CREATE TABLE IF NOT EXISTS `cecs323sec5og7`.`HeadChef` (
   `SID` INT NOT NULL,
   `EID` INT NOT NULL,
-  PRIMARY KEY (`SID`, `EID`),
+  `salaryAmount` INT NULL,
+  `recipeNum` INT NOT NULL,
+  PRIMARY KEY (`SID`, `EID`, `recipeNum`),
   CONSTRAINT `headchef_fk_EID`
     FOREIGN KEY (`EID`)
     REFERENCES `cecs323sec5og7`.`Employee` (`EID`)
@@ -464,15 +481,9 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `cecs323sec5og7`.`Department` ;
 
 CREATE TABLE IF NOT EXISTS `cecs323sec5og7`.`Department` (
-  `EID` INT NOT NULL,
   `departmentID` INT NOT NULL,
   `dName` VARCHAR(45) NULL,
-  PRIMARY KEY (`EID`, `departmentID`),
-  CONSTRAINT `deparment_fk_EID`
-    FOREIGN KEY (`EID`)
-    REFERENCES `cecs323sec5og7`.`LineCook` (`EID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`departmentID`))
 ENGINE = InnoDB;
 
 
@@ -488,6 +499,11 @@ CREATE TABLE IF NOT EXISTS `cecs323sec5og7`.`skills` (
   CONSTRAINT `skills_fk_EID`
     FOREIGN KEY (`EID`)
     REFERENCES `cecs323sec5og7`.`SousChef` (`EID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `skills_fk_skillName`
+    FOREIGN KEY (`skillName`)
+    REFERENCES `cecs323sec5og7`.`menuItem` (`name`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -524,11 +540,17 @@ DROP TABLE IF EXISTS `cecs323sec5og7`.`Web` ;
 
 CREATE TABLE IF NOT EXISTS `cecs323sec5og7`.`Web` (
   `OID` INT NOT NULL,
-  `ip` INT NULL,
-  PRIMARY KEY (`OID`),
-  CONSTRAINT `web_fk_OID`
+  `CID` INT NOT NULL,
+  `ipAddress` VARCHAR(20) NULL,
+  PRIMARY KEY (`OID`, `CID`),
+  CONSTRAINT `web_fk_oid`
     FOREIGN KEY (`OID`)
-    REFERENCES `cecs323sec5og7`.`order` (`OID`)
+    REFERENCES `cecs323sec5og7`.`togo` (`OID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `web_fk_CID`
+    FOREIGN KEY (`CID`)
+    REFERENCES `cecs323sec5og7`.`togo` (`OID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -541,11 +563,45 @@ DROP TABLE IF EXISTS `cecs323sec5og7`.`Phone` ;
 
 CREATE TABLE IF NOT EXISTS `cecs323sec5og7`.`Phone` (
   `OID` INT NOT NULL,
-  `phone` INT NULL,
-  PRIMARY KEY (`OID`),
-  CONSTRAINT `phone_fk_OID`
+  `CID` INT NOT NULL,
+  `phoneNumber` INT NULL,
+  PRIMARY KEY (`OID`, `CID`),
+  CONSTRAINT `phone_fk_oid`
     FOREIGN KEY (`OID`)
-    REFERENCES `cecs323sec5og7`.`order` (`OID`)
+    REFERENCES `cecs323sec5og7`.`togo` (`OID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `phone_fk_CID`
+    FOREIGN KEY (`CID`)
+    REFERENCES `cecs323sec5og7`.`togo` (`CID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `cecs323sec5og7`.`CooksInDepartment`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `cecs323sec5og7`.`CooksInDepartment` ;
+
+CREATE TABLE IF NOT EXISTS `cecs323sec5og7`.`CooksInDepartment` (
+  `OID` INT NOT NULL,
+  `SID` INT NOT NULL,
+  `departmentID` INT NOT NULL,
+  PRIMARY KEY (`OID`, `SID`, `departmentID`),
+  CONSTRAINT `cookdepartment_fk_OID`
+    FOREIGN KEY (`OID`)
+    REFERENCES `cecs323sec5og7`.`LineCook` (`EID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `cookdepartment_fk_SID`
+    FOREIGN KEY (`SID`)
+    REFERENCES `cecs323sec5og7`.`LineCook` (`EID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `cookdepartment_fk_DepID`
+    FOREIGN KEY (`departmentID`)
+    REFERENCES `cecs323sec5og7`.`Department` (`departmentID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
